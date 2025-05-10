@@ -1,8 +1,3 @@
-/*==================================================
-/database/models/Student.js
-
-It defines the student model for the database.
-==================================================*/
 const Sequelize = require('sequelize');
 const db = require('../db');
 
@@ -26,7 +21,10 @@ const Student = db.define("student", {
   },
   gpa: {
     type: Sequelize.DECIMAL(2, 1),
-    validate: { min: 0.0, max: 4.0 }
+    validate: {
+      min: 0.0,
+      max: 4.0
+    }
   }
 });
 
