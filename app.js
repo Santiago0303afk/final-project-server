@@ -10,11 +10,15 @@ It initiates all required parts of server application such as Express, routes, d
 // Import database setup utilities
 const createDB = require('./database/utils/createDB');  // Import function to create database
 const seedDB = require('./database/utils/seedDB');      // Import function to seed database
-// Import database instance for database connection (including database name, username, and password)
-const db = require('./database');
+const db = require('./database');                       // Import database instance
+
+/* EXPRESS & ROUTING SETUP */
+const express = require("express");
+const app = express();
+const apiRouter = require('./routes/index');
+const open = require('open');  // For automatically opening the browser
 
 /* MODEL SYNCHRONIZATION & DATABASE SEEDING */
-// Set up sync and seed process
 const syncDatabase = async () => {
   try {
     await db.sync({ force: true });  // Drop tables if they already exist
@@ -25,13 +29,6 @@ const syncDatabase = async () => {
     console.error('syncDB error:', err);
   }  
 };
-
-/* SET UP EXPRESS APPLICATION */
-const express = require("express");
-const app = express();
-
-/* SET UP ROUTES */
-const apiRouter = require('./routes/index');
 
 /* CONFIGURE EXPRESS APPLICATION */
 const configureApp = async () => {
@@ -54,20 +51,17 @@ const configureApp = async () => {
   });
 };
 
-/* SET UP BOOT FOR SERVER APPLICATION */
-const bootApp = async () => {
-  await createDB();       // Create database if not exists
-  await syncDatabase();   // Seed the database
-  await configureApp();   // Set up routes/middleware
-};
-
-/* START THE SERVER */
+/* SERVER BOOTSTRAP */
 const PORT = 5001;
-const open = require('open');
 
-bootApp().then(() => {
+const bootApp = async () => {
+  await createDB();         // Create database if not exists
+  await syncDatabase();     // Seed the database
+  await configureApp();     // Set up routes and middleware
   app.listen(PORT, () => {
     console.log(`Server started on ${PORT}`);
-    open(`http://localhost:${PORT}`);
+    open(`http://localhost:${PORT}`);  // Open browser
   });
-});
+};
+
+bootApp();
