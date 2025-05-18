@@ -7,6 +7,7 @@ It initiates all required parts of server application such as Express, routes, d
 ==================================================*/
 /* SET UP DATABASE */
 // Import database setup utilities
+const cors = require("cors");
 const createDB = require('./database/utils/createDB');  // Import function to create database
 const seedDB = require('./database/utils/seedDB');  // Import function to seed database
 // Import database instance for database connection (including database name, username, and password)
